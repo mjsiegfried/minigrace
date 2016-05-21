@@ -5,9 +5,9 @@ def bagTest = object {
     class forMethod(m) {
         inherits gU.testCaseNamed(m)
 
-		var oneToFive
-		var acesAndEights
-		var empty
+        var oneToFive
+        var acesAndEights
+        var empty
 
         method setup {
             oneToFive := nc.bag.withAll ["one"::1, "two"::1, "three"::1,
@@ -21,10 +21,8 @@ def bagTest = object {
             assert(empty.size) shouldBe 0
             assert(acesAndEights.size) shouldBe 5
         }
-	
-	}
-
-
+    
+    }
 
 }
 
@@ -361,7 +359,7 @@ def dictionaryTest = object {
     }
 }
 
-def dictTests = gU.testSuite.fromTestMethodsIn(dictionaryTest)
-dictTests.runAndPrintResults
+def bagTests = gU.testSuite.fromTestMethodsIn(bagTest)
+bagTests.runAndPrintResults
 
 
