@@ -10,9 +10,8 @@ def bagTest = object {
         var empty
 
         method setup {
-            oneToFive := nc.bag.withAll ["one"::1, "two"::1, "three"::1,
-                "four"::1, "five"::1]
-            acesAndEights := nc.bag.withAll ["one"::2, "eight"::3]
+            oneToFive := nc.bag.withAll [1,2,3,4,5]
+            acesAndEights := nc.bag.withAll [1,1,8,8,8]
             empty := nc.bag.empty
         }
 
@@ -20,6 +19,22 @@ def bagTest = object {
             assert(oneToFive.size) shouldBe 5
             assert(empty.size) shouldBe 0
             assert(acesAndEights.size) shouldBe 5
+        }
+
+        method testDictionarySizeAfterRemove {
+            oneToFive.remove(1)
+            deny(oneToFive.contains(1)) description "1 still present"
+            assert(oneToFive.size) shouldBe 4 
+        }
+
+        method testDictionaryContentsAfterMultipleRemove {
+            oneToFive.remove(1).remove(2).remove(3)
+            assert(oneToFive.size) shouldBe 2
+            deny(oneToFive.contains(1)) description "1 still present"
+            deny(oneToFive.contains (2)) description "2 still present"
+            deny(oneToFive.contains (3)) description "3 still present"
+            assert(oneToFive.contains(4))
+            assert(oneToFive.contains(5))
         }
     
     }
@@ -58,11 +73,9 @@ def dictionaryTest = object {
         }
 
         method testDictionarySizeAfterRemove {
-            oneToFive.removeKey "one"
-            deny(oneToFive.containsKey "one") description "\"one\" still present"
-            oneToFive.removeKey "two"
-            oneToFive.removeKey "three"
-            assert(oneToFive.size) shouldBe 2
+            oneToFive.remove(1)
+            deny(oneToFive.contains(1)) description "\"one\" still present"
+            assert(oneToFive.size) shouldBe 4 
         }
 
         method testDictionaryContentsAfterMultipleRemove {
