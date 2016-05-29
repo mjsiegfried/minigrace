@@ -58,6 +58,16 @@ def bagTest = object {
             assert (empty.countOf(8)) shouldBe 0
         }
 
+        method testElementsAndCounts {
+            var elAndCount := oneToFive.elementsAndCounts
+            var elAndCount2 := acesAndEights.elementsAndCounts
+            assert (elAndCount) hasType (Enumerable<Binding<Number,Number>>)
+            assert(elAndCount.into (emptySet)) shouldBe (
+                set [1::1, 2::1, 3::1, 4::1, 5::1])
+            assert(elAndCount2.into (emptySet)) shouldBe (
+                set [1::2, 8::3])
+        }
+
         method testElementsAndCountsAsList {
             var elAndCount := oneToFive.elementsAndCounts.asList
             assert (elAndCount) hasType (List<Binding<Number,Number>>)
