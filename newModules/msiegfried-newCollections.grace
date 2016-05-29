@@ -9,7 +9,7 @@ class bag<T> {
     }
 
     class empty {
-        inherits collection.TRAIT<T>
+        inherits collection.TRAIT
         var size is readable := 0
         var inner := emptyDictionary
 
@@ -52,33 +52,58 @@ class bag<T> {
         }
 
         method asString {
-            var s := "bag\{"
+            var s := "bag\["
             do {each -> s := s ++ each.asString }
                 separatedBy { s := s ++ ", " }
-            s ++ "\}"
+            s ++ "\]"
         }
 
         method do(block1) {
-            inner.keysAndValuesDo { k, v -> {
-                for (0..v) {   
+            inner.keysAndValuesDo { k, v -> 
+                for (0..(v-1)) do {   
                     block1.apply(k)
                 }
             } 
         }
 
-        method isSubset(b2: Bag<T>) {
-            self.do{ each ->
-                if (b2.contains(each).not) then { return false }
+        method do(block1) separatedBy(block0) {
+            var firstTime := true
+            var i := 0
+            self.do { each ->
+                if (firstTime) then {
+                    firstTime := false
+                } else {
+                    block0.apply
+                }
+                block1.apply(each)
             }
-            return true
+            return self
         }
 
-        method isSuperset(b2: Iterable<T>) {
-            b2.do{ each ->
-                if (self.contains(each).not) then { return false }
+        method iterator {
+            object {
+                var count := 1
+                var idx := -1
+                method hasNext { size >= count }
+                method next {
+                    var candidate
+                    def innerSize = inner.size
+                    while {
+                        idx := idx + 1
+                        if (idx >= innerSize) then {
+                            IteratorExhausted.raise "iterator over {outer.asString}"
+                        }
+                        candidate := inner.at(idx)
+                    } do { }
+                    count := count + 1
+                    candidate
+                }
             }
-            return true
         }
+
+
+
+
 
 
 

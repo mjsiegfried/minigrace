@@ -36,6 +36,24 @@ def bagTest = object {
             assert(oneToFive.contains(4))
             assert(oneToFive.contains(5))
         }
+
+        method testAsString {
+            def bag2 = nc.bag.withAll [1,2]
+            def bStr = bag2.asString
+            assert((bStr == "bag[1, 2]") || {bStr == "bag[2, 1]"})
+                description "\"{bStr}\" should be \"bag[1, 2]\""
+        }
+
+        method testAsStringEmpty {
+            assert(empty.asString) shouldBe "bag[]"
+        }
+
+        method testDictionaryEmptyDo {
+            empty.do {each -> failBecause "emptySet.do did with {each}"}
+            assert (true)   // so that there is always an assert
+        }
+
+
     
     }
 
@@ -50,12 +68,6 @@ def dictionaryTest = object {
         var evens
         var empty
 
-        method setup {
-            oneToFive := nc.dictionary.withAll ["one"::1, "two"::2, "three"::3,
-                "four"::4, "five"::5]
-            evens := nc.dictionary.withAll ["two"::2, "four"::4, "six"::6, "eight"::8]
-            empty := nc.dictionary.empty
-        }
         method testDictionaryTypeCollection {
             assert (oneToFive) hasType (Collection<Binding<String,Number>>)
         }
@@ -64,44 +76,6 @@ def dictionaryTest = object {
         }
         method testDictionaryTypeNotTypeWithWombat {
             deny (oneToFive) hasType (Dictionary<String,Number> & type { wombat })
-        }
-
-        method testDictionarySize {
-            assert(oneToFive.size) shouldBe 5
-            assert(empty.size) shouldBe 0
-            assert(evens.size) shouldBe 4
-        }
-
-        method testDictionarySizeAfterRemove {
-            oneToFive.remove(1)
-            deny(oneToFive.contains(1)) description "\"one\" still present"
-            assert(oneToFive.size) shouldBe 4 
-        }
-
-        method testDictionaryContentsAfterMultipleRemove {
-            oneToFive.removeKey "one" .removeKey "two" .removeKey "three"
-            assert(oneToFive.size) shouldBe 2
-            deny(oneToFive.containsKey "one") description "\"one\" still present"
-            deny(oneToFive.containsKey "two") description "\"two\" still present"
-            deny(oneToFive.containsKey "three") description "\"three\" still present"
-            assert(oneToFive.containsKey "four")
-            assert(oneToFive.containsKey "five")
-        }
-
-        method testAsString {
-            def dict2 = dictionary ["one"::1, "two"::2]
-            def dStr = dict2.asString
-            assert((dStr == "dict⟬one::1, two::2⟭") || {dStr == "dict⟬two::2, one::1⟭"})
-                description "\"{dStr}\" should be \"dict⟬one::1, two::2⟭\""
-        }
-
-        method testAsStringEmpty {
-            assert(empty.asString) shouldBe "dict⟬⟭"
-        }
-
-        method testDictionaryEmptyDo {
-            empty.do {each -> failBecause "emptySet.do did with {each}"}
-            assert (true)   // so that there is always an assert
         }
 
         method testDictionaryEqualityEmpty {
