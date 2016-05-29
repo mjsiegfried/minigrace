@@ -6,7 +6,7 @@ class bag<T> {
 
     method withAll(a: Iterable<T>) {
         def result = self.empty 
-        a.do { x -> result.add(x) }
+        a.do { elt -> result.add(elt) }
         result
     }
 
@@ -15,30 +15,36 @@ class bag<T> {
         var size is readable := 0
         var inner := emptyDictionary
 
-        method contains(x) {
-            return inner.containsKey(x) 
+        method contains(elt) {
+            return inner.containsKey(elt) 
         }
 
-        method add(x:T) {
-            var numXs := 0
-            if(inner.containsKey(x)) then {
-                numXs := inner.at(x)
+        method add(elt:T) {
+            var numElts := 0
+            if(inner.containsKey(elt)) then {
+                numElts := inner.at(elt)
             }
-            inner.at(x) put (numXs + 1)
+            inner.at(elt) put (numElts + 1)
             size := size + 1 
             self    // for chaining
         }
 
         method addAll(elements) {
-            for (elements) do { x ->
-                self.add(x) 
+            for (elements) do { elt ->
+                self.add(elt) 
             }
             self    // for chaining
         }
 
         method remove (elt:T) ifAbsent (block) {
             if (inner.containsKey(elt)) then {
-                inner.removeKey(elt)
+                var numElts := (inner.at(elt) - 1)
+                if ((numElts) < 1) then {
+                    inner.removeKey(elt)
+                }
+                else {
+                    inner.at(elt) put (numElts)
+                }
                 size := size - 1
             } else {
                 block.apply
@@ -68,9 +74,14 @@ class bag<T> {
             } 
         }
 
-
-
-
+        method countOf(elt:T) {
+            if (inner.containsKey(elt)) then {
+                return inner.at(elt)        
+            }
+            else {
+                return 0
+            }
+        }
 
 
 
