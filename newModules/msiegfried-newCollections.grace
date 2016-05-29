@@ -38,12 +38,12 @@ class bag<T> {
 
         method remove (elt:T) ifAbsent (block) {
             if (inner.containsKey(elt)) then {
-                var numElts := (inner.at(elt) - 1)
-                if ((numElts) < 1) then {
+                var newNumElts := (inner.at(elt) - 1)
+                if ((newNumElts) < 1) then {
                     inner.removeKey(elt)
                 }
                 else {
-                    inner.at(elt) put (numElts)
+                    inner.at(elt) put (newNumElts)
                 }
                 size := size - 1
             } else {
@@ -92,6 +92,19 @@ class bag<T> {
             } 
         }
 
+        method includes(booleanBlock) {
+            self.do { each ->
+                if (booleanBlock.apply(each)) then { return true }
+            }
+            return false
+        }
+        method find(booleanBlock)ifNone(notFoundBlock) {
+            self.do { each ->
+                if (booleanBlock.apply(each)) then { return each }
+            }
+            return notFoundBlock.apply
+        }
+
         method countOf(elt:T) {
             if (inner.containsKey(elt)) then {
                 return inner.at(elt)        
@@ -101,10 +114,63 @@ class bag<T> {
             }
         }
 
-
         method iterator {
             self.elementsAndCounts.iterator
         }
+
+        method ==(other) {
+            if (Iterable.match(other)) then {
+                var otherSize := 0
+                other.do { each ->
+                    otherSize := otherSize + 1
+                    if (! self.contains(each)) then {
+                        return false
+                    }
+                }
+                otherSize == self.size
+            } else { 
+                false
+            }
+        }
+        method copy {
+            outer.withAll(self)
+        }
+        method ++ (other) {
+        // set union
+            copy.addAll(other)
+        }
+        method -- (other) {
+        // set difference
+            def result = set.empty
+            for (self) do {v->
+                if (!other.contains(v)) then {
+                    result.add(v)
+                }
+            }
+            result
+        }
+        method ** (other) {
+        // set intersection
+            (filter {each -> other.contains(each)}).asSet
+        }
+        method isSubset(s2: Iterable<T>) {
+            self.do{ each ->
+                if (s2.contains(each).not) then { return false }
+            }
+            return true
+        }
+
+        method isSuperset(s2: Iterable<T>) {
+            s2.do{ each ->
+                if (self.contains(each).not) then { return false }
+            }
+            return true
+        }
+        method into(existing: Expandable<T>) -> Collection<T> {
+            do { each -> existing.add(each) }
+            existing
+        }
+
 
         class elementsAndCounts -> Enumerable<T> {
             inherits cp.enumerable.TRAIT<T>

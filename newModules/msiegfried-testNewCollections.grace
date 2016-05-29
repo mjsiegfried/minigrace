@@ -21,19 +21,19 @@ def bagTest = object {
             assert(acesAndEights.size) shouldBe 5
         }
 
-        method testDictionarySizeAfterRemove {
+        method testBagSizeAfterRemove {
             oneToFive.remove(1)
             deny(oneToFive.contains(1)) description "1 still present"
             assert(oneToFive.size) shouldBe 4 
         }
 
-        method testDictionarySizeAfterRemoveAll {
+        method testBagSizeAfterRemoveAll {
             acesAndEights.removeAll(1)
             deny(acesAndEights.contains(1)) description "1 still present"
             assert(acesAndEights.size) shouldBe 3 
         }
 
-        method testDictionaryContentsAfterMultipleRemove {
+        method testBagContentsAfterMultipleRemove {
             oneToFive.remove(1).remove(2).remove(3)
             assert(oneToFive.size) shouldBe 2
             deny(oneToFive.contains(1)) description "1 still present"
@@ -54,10 +54,111 @@ def bagTest = object {
             assert(empty.asString) shouldBe "bag[]"
         }
 
-        method testDictionaryEmptyDo {
+        method testBagEmptyDo {
             empty.do {each -> failBecause "emptySet.do did with {each}"}
             assert (true)   // so that there is always an assert
         }
+
+        method testSetOneToFiveDo {
+            def accum = empty
+            var n := 1
+            oneToFive.do { each ->
+                accum.add(each)
+                assert (accum.size) shouldBe (n)
+                n := n + 1
+            }
+            assert(accum) shouldBe (oneToFive)
+        }
+
+        method testAcesAndEightsDo {
+            def accum = empty
+            var n := 1
+            acesAndEights.do { each ->
+                accum.add(each)
+                assert (accum.size) shouldBe (n)
+                n := n + 1
+            }
+            assert(accum) shouldBe (acesAndEights)
+        }
+
+        // ************************* begin new tests ****************************/
+
+        method testSetDoSeparatedBy {
+            var s := ""
+            acesAndEights.remove(1).remove(1)
+            acesAndEights.do { each -> s := s ++ each.asString } separatedBy { s := s ++ ", " }
+            assert (s == "8, 8, 8")
+                description "{s} should be \"8, 8, 8\""
+        }
+
+        method testSetDoSeparatedByEmpty {
+            var s := "nothing"
+            empty.do { failBecause "do did when list is empty" }
+                separatedBy { s := "kilroy" }
+            assert (s) shouldBe ("nothing")
+        }
+
+        method testSetDoSeparatedBySingleton {
+            var s := "nothing"
+            nc.bag.withAll[1].do { each -> assert(each)shouldBe(1) }
+                separatedBy { s := "kilroy" }
+            assert (s) shouldBe ("nothing")
+        }
+
+        method testAcesAndEightsIterator {
+            def ei = acesAndEights.iterator
+            assert (acesAndEights.size == 5) description "acesAndEights.size = {acesAndEights.size}, should be 5"
+            assert (ei.hasNext) description "the acesAndEights iterator has no elements"
+            def copyBag = nc.bag.withAll [ei.next, ei.next, ei.next, ei.next, ei.next]
+            deny (ei.hasNext) description "the acesAndEights iterator has more than 5 elements"
+            assert (copyBag) shouldBe (acesAndEights)
+        }
+
+        method testSetMapAcesAndEights {
+            assert(acesAndEights.map{x -> x + 1}.into (emptySet)) shouldBe (set
+[1, 8])
+        }
+
+        method testSetFilterOdd {
+            assert(oneToFive.filter{x -> (x % 2) == 1}.into (empty))
+                shouldBe (set [1, 3, 5])
+        }
+        method testSetCopy {
+            def acesAndEightsCopy = acesAndEights.copy
+            acesAndEights.remove(1)
+            assert (acesAndEights.size) shouldBe 4
+            assert (acesAndEights) shouldBe (nc.bag.withAll [1,8,8,8])
+            assert (acesAndEightsCopy) shouldBe (nc.bag.withAll [1,1,8,8,8])
+
+        }
+
+        // these are broken at the moment... 
+        method testSetUnion {
+            assert (oneToFive ++ acesAndEights) shouldBe (nc.bag.withAll
+[1,1,1,2,3,4,5,8,8,8])
+        }
+        method testSetDifference {
+            assert (oneToFive -- acesAndEights) shouldBe (nc.bag.withAll
+[1,2,3,4,5,8,8,8])
+        }
+        method testSetIntersection {
+            assert (oneToFive ** acesAndEights) shouldBe (nc.bag.withAll
+[1])
+        }
+        method testSetFailFastIterator {
+            def input = nc.bag.withAll [1,5,3,2,4]
+            def iter = input.iterator
+            input.add(6)
+            assert {iter.next} shouldRaise (ConcurrentModification)
+            def iter2 = input.iterator
+            assert {iter2.next} shouldntRaise (ConcurrentModification)
+            def iter3 = input.iterator
+            input.remove(2)
+            assert {iter3.next} shouldRaise (ConcurrentModification)
+        }
+
+
+        // ************************* end new tests ****************************/
 
         method testCountOf {
             assert (acesAndEights.countOf(8)) shouldBe 3
