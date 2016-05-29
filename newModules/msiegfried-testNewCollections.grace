@@ -58,11 +58,11 @@ def bagTest = object {
             assert (empty.countOf(8)) shouldBe 0
         }
 
-        method testElementsAndCounts {
-            var elAndCount := oneToFive.elementsAndCounts.sort
+        method testElementsAndCountsAsList {
+            var elAndCount := oneToFive.elementsAndCounts.asList
             assert (elAndCount) hasType (List<Binding<Number,Number>>)
             assert (elAndCount.size) shouldBe 5
-            assert (elAndCount[0]) shouldBe (1::1) 
+            assert (elAndCount[1]) shouldBe (1::1) 
         }
     
     }

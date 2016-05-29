@@ -83,11 +83,24 @@ class bag<T> {
             }
         }
 
+        method elementsAndCounts -> Enumerable<T> {
+            object {
+                method do(block1) {
+                    inner.keysAndValuesDo (block1) 
+                }
 
+                method iterator {
+                    inner.bindingsIterator
+                }
 
-
+                method asList {
+                    var result := emptyList 
+                    for (self) do { k, v -> result.add(k::v) }
+                    result
+                }
+            }
+        }         
     }
-
 }
 
 
