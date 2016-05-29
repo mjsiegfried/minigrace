@@ -132,16 +132,19 @@ class bag<T> {
                 false
             }
         }
+
         method copy {
             outer.withAll(self)
         }
+
         method ++ (other) {
-        // set union
+        // bag union
             copy.addAll(other)
         }
+
         method -- (other) {
-        // set difference
-            def result = set.empty
+        // bag difference
+            def result = bag.empty
             for (self) do {v->
                 if (!other.contains(v)) then {
                     result.add(v)
@@ -150,9 +153,10 @@ class bag<T> {
             result
         }
         method ** (other) {
-        // set intersection
-            (filter {each -> other.contains(each)}).asSet
+        // bag intersection
+            (filter {each -> other.contains(each)})
         }
+
         method isSubset(s2: Iterable<T>) {
             self.do{ each ->
                 if (s2.contains(each).not) then { return false }
@@ -170,7 +174,6 @@ class bag<T> {
             do { each -> existing.add(each) }
             existing
         }
-
 
         class elementsAndCounts -> Enumerable<T> {
             inherits cp.enumerable.TRAIT<T>
