@@ -59,6 +59,24 @@ class bag<T> {
             self    // for chaining
         }
 
+        method removeAll (elt:T) ifAbsent (block) {
+            if (inner.containsKey(elt)) then {
+                var numElts := (inner.at(elt))
+                inner.removeKey(elt)
+                size := size - numElts
+            } else {
+                block.apply
+            }
+            self    // for chaining
+        }
+
+        method removeAll(elt:T) {
+            removeAll (elt) ifAbsent {
+                NoSuchObject.raise "set does not contain {elt}"
+            }
+            self    // for chaining
+        }
+
         method asString {
             var s := "bag\["
             do {each -> s := s ++ each.asString }
@@ -81,6 +99,11 @@ class bag<T> {
             else {
                 return 0
             }
+        }
+
+
+        method iterator {
+            self.elementsAndCounts.iterator
         }
 
         class elementsAndCounts -> Enumerable<T> {
