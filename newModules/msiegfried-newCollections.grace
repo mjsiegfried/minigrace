@@ -1,3 +1,5 @@
+import "collectionsPrelude" as cp
+
 class bag<T> {
 
     method asString { "a bag factory" }
@@ -9,7 +11,7 @@ class bag<T> {
     }
 
     class empty {
-        inherits collection.TRAIT
+        inherits cp.collection.TRAIT
         var size is readable := 0
         var inner := emptyDictionary
 
@@ -66,40 +68,6 @@ class bag<T> {
             } 
         }
 
-        method do(block1) separatedBy(block0) {
-            var firstTime := true
-            var i := 0
-            self.do { each ->
-                if (firstTime) then {
-                    firstTime := false
-                } else {
-                    block0.apply
-                }
-                block1.apply(each)
-            }
-            return self
-        }
-
-        method iterator {
-            object {
-                var count := 1
-                var idx := -1
-                method hasNext { size >= count }
-                method next {
-                    var candidate
-                    def innerSize = inner.size
-                    while {
-                        idx := idx + 1
-                        if (idx >= innerSize) then {
-                            IteratorExhausted.raise "iterator over {outer.asString}"
-                        }
-                        candidate := inner.at(idx)
-                    } do { }
-                    count := count + 1
-                    candidate
-                }
-            }
-        }
 
 
 
