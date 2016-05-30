@@ -1,5 +1,9 @@
 import "collectionsPrelude" as cp
 
+method max(a,b)  {       // copied from standard prelude
+    if (a > b) then { a } else { b }
+}
+
 class bag<T> {
 
     method asString { "a bag factory" }
@@ -116,8 +120,8 @@ class bag<T> {
 
         class iterator {
             var source := emptyList
-            outer.do { k ->
-                source.add(k) 
+            outer.do { elt ->
+                source.add(elt) 
             }
             def sourceIterator = source.iterator
             method hasNext { sourceIterator.hasNext }
@@ -144,8 +148,20 @@ class bag<T> {
         }
 
         method ++ (other) {
-        // bag union
-            copy.addAll(other)
+            // bag union
+            def elAndCount = self.elementsAndCounts
+            def result = bag.empty
+            elAndCount.do { k, v ->
+                var maxVal := max(v, other.countOf(k)) 
+                for (0 .. (maxVal-1)) do {
+                    result.add(k)
+                }
+            }
+
+            // need to add the other loop
+            // need to add a method to add multiple easily
+
+            result
         }
 
         method -- (other) {

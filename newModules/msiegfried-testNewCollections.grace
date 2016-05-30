@@ -98,7 +98,7 @@ def bagTest = object {
 
         method testSetDoSeparatedBySingleton {
             var s := "nothing"
-            nc.bag.withAll[1].do { each -> assert(each)shouldBe(1) }
+            nc.bag.withAll [1].do { each -> assert(each)shouldBe(1) }
                 separatedBy { s := "kilroy" }
             assert (s) shouldBe ("nothing")
         }
@@ -114,12 +114,12 @@ def bagTest = object {
 
         method testSetMapAcesAndEights {
             assert(acesAndEights.map{x -> x + 1}.into (emptySet)) shouldBe (set
-[1, 8])
+[2, 9])
         }
 
         method testSetFilterOdd {
             assert(oneToFive.filter{x -> (x % 2) == 1}.into (empty))
-                shouldBe (set [1, 3, 5])
+                shouldBe (nc.bag.withAll [1, 3, 5])
         }
         method testSetCopy {
             def acesAndEightsCopy = acesAndEights.copy
@@ -131,7 +131,7 @@ def bagTest = object {
         }
 
         method testBagUnion {
-            assert (oneToFive ++ acesAndEights) shouldBe (nc.bag.withAll [1,1,1,2,3,4,5,8,8,8])
+            assert (oneToFive ++ acesAndEights) shouldBe (nc.bag.withAll [1,1,2,3,4,5,8,8,8])
         }
         method testBagDifference {
             assert (oneToFive -- acesAndEights) shouldBe (nc.bag.withAll [1,2,3,4,5,8,8,8])
