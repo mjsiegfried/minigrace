@@ -114,8 +114,14 @@ class bag<T> {
             }
         }
 
-        method iterator {
-            self.elementsAndCounts.iterator
+        class iterator {
+            var source := emptyList
+            outer.do { k ->
+                source.add(k) 
+            }
+            def sourceIterator = source.iterator
+            method hasNext { sourceIterator.hasNext }
+            method next { sourceIterator.next }
         }
 
         method ==(other) {
