@@ -21,6 +21,14 @@ def bagTest = object {
             assert(acesAndEights.size) shouldBe 5
         }
 
+        method testAdd {
+            assert(true)
+        }
+
+        method testAddMultiple {
+            assert(true)
+        }
+
         method testBagSizeAfterRemove {
             oneToFive.remove(1)
             deny(oneToFive.contains(1)) description "1 still present"
@@ -55,11 +63,11 @@ def bagTest = object {
         }
 
         method testBagEmptyDo {
-            empty.do {each -> failBecause "emptySet.do did with {each}"}
+            empty.do {each -> failBecause "emptyBag.do did with {each}"}
             assert (true)   // so that there is always an assert
         }
 
-        method testSetOneToFiveDo {
+        method testBagOneToFiveDo {
             def accum = empty
             var n := 1
             oneToFive.do { each ->
@@ -81,7 +89,7 @@ def bagTest = object {
             assert(accum) shouldBe (acesAndEights)
         }
 
-        method testSetDoSeparatedBy {
+        method testBagDoSeparatedBy {
             var s := ""
             acesAndEights.remove(1).remove(1)
             acesAndEights.do { each -> s := s ++ each.asString } separatedBy { s := s ++ ", " }
@@ -89,14 +97,14 @@ def bagTest = object {
                 description "{s} should be \"8, 8, 8\""
         }
 
-        method testSetDoSeparatedByEmpty {
+        method testBagDoSeparatedByEmpty {
             var s := "nothing"
             empty.do { failBecause "do did when list is empty" }
                 separatedBy { s := "kilroy" }
             assert (s) shouldBe ("nothing")
         }
 
-        method testSetDoSeparatedBySingleton {
+        method testBagDoSeparatedBySingleton {
             var s := "nothing"
             nc.bag.withAll [1].do { each -> assert(each)shouldBe(1) }
                 separatedBy { s := "kilroy" }
@@ -112,16 +120,16 @@ def bagTest = object {
             assert (copyBag) shouldBe (acesAndEights)
         }
 
-        method testSetMapAcesAndEights {
+        method testBagMapAcesAndEights {
             assert(acesAndEights.map{x -> x + 1}.into (emptySet)) shouldBe (set
 [2, 9])
         }
 
-        method testSetFilterOdd {
+        method testBagFilterOdd {
             assert(oneToFive.filter{x -> (x % 2) == 1}.into (empty))
                 shouldBe (nc.bag.withAll [1, 3, 5])
         }
-        method testSetCopy {
+        method testBagCopy {
             def acesAndEightsCopy = acesAndEights.copy
             acesAndEights.remove(1)
             assert (acesAndEights.size) shouldBe 4
@@ -144,7 +152,7 @@ def bagTest = object {
         }
 
 
-        method testSetFailFastIterator {
+        method testBagFailFastIterator {
             def input = nc.bag.withAll [1,5,3,2,4]
             def iter = input.iterator
             input.add(6)

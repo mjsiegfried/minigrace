@@ -33,6 +33,16 @@ class bag<T> {
             self    // for chaining
         }
 
+        method addMultiple(elt:T, num:Number) {
+            var numElts := 0
+            if(inner.containsKey(elt)) then {
+                numElts := inner.at(elt)
+            }
+            inner.at(elt) put (numElts + num)
+            size := size + num 
+            self    // for chaining
+        }
+
         method addAll(elements) {
             for (elements) do { elt ->
                 self.add(elt) 
@@ -150,17 +160,17 @@ class bag<T> {
         method ++ (other) {
             // bag union
             def elAndCount = self.elementsAndCounts
+            def otherElAndCount = other.elementsAndCounts
             def result = bag.empty
             elAndCount.do { k, v ->
                 var maxVal := max(v, other.countOf(k)) 
-                for (0 .. (maxVal-1)) do {
-                    result.add(k)
+                result.addMultiple(k, maxVal)
+            }
+            otherElAndCount.do { k, v ->
+                if(!self.contains(k)) then {
+                    result.addMultiple(k, v)
                 }
             }
-
-            // need to add the other loop
-            // need to add a method to add multiple easily
-
             result
         }
 
