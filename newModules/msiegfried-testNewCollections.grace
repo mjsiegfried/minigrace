@@ -144,26 +144,11 @@ def bagTest = object {
             assert (oneToFive ++ acesAndEights) shouldBe (nc.bag.withAll [1,1,2,3,4,5,8,8,8])
         }
         method testBagDifference {
-            assert (oneToFive -- acesAndEights) shouldBe (nc.bag.withAll [1,2,3,4,5,8,8,8])
+            assert (oneToFive -- acesAndEights) shouldBe (nc.bag.withAll [2,3,4,5])
         }
 
-
-        // this is broken at the moment... 
         method testBagIntersection {
-//            assert (oneToFive ** acesAndEights) shouldBe (nc.bag.withAll [1])
-        }
-
-
-        method testBagFailFastIterator {
-            def input = nc.bag.withAll [1,5,3,2,4]
-            def iter = input.iterator
-            input.add(6)
-            assert {iter.next} shouldRaise (ConcurrentModification)
-            def iter2 = input.iterator
-            assert {iter2.next} shouldntRaise (ConcurrentModification)
-            def iter3 = input.iterator
-            input.remove(2)
-            assert {iter3.next} shouldRaise (ConcurrentModification)
+            assert (oneToFive ** acesAndEights) shouldBe (nc.bag.withAll [1])
         }
 
         method testCountOf {

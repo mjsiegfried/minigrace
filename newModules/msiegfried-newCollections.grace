@@ -4,6 +4,10 @@ method max(a,b)  {       // copied from standard prelude
     if (a > b) then { a } else { b }
 }
 
+method min(a,b)  {  
+    if (a < b) then { a } else { b }
+}
+
 class bag<T> {
 
     method asString { "a bag factory" }
@@ -158,7 +162,7 @@ class bag<T> {
         }
 
         method ++ (other) {
-            // bag union
+        // bag union
             def elAndCount = self.elementsAndCounts
             def otherElAndCount = other.elementsAndCounts
             def result = bag.empty
@@ -176,17 +180,23 @@ class bag<T> {
 
         method -- (other) {
         // bag difference
+            def elAndCount = self.elementsAndCounts
             def result = bag.empty
-            for (self) do {v->
-                if (!other.contains(v)) then {
-                    result.add(v)
-                }
+            elAndCount.do { k, v ->
+                var numVals := max(0, (v - other.countOf(k))) 
+                result.addMultiple(k, numVals)
             }
             result
         }
         method ** (other) {
         // bag intersection
-            (filter {each -> other.contains(each)})
+            def elAndCount = self.elementsAndCounts
+            def result = bag.empty
+            elAndCount.do { k, v ->
+                var minVal := min(v, other.countOf(k)) 
+                result.addMultiple(k, minVal)
+            }
+            result
         }
 
         method isSubset(s2: Iterable<T>) {
