@@ -22,11 +22,13 @@ def bagTest = object {
         }
 
         method testAdd {
-            assert(true)
+            assert (empty.add(9)) shouldBe (nc.bag.withAll [9])
+            assert (acesAndEights.add(10)) shouldBe  (nc.bag.withAll [1,1,8,8,8,10])
         }
 
         method testAddMultiple {
-            assert(true)
+            assert (empty.addMultiple(9, 5)) shouldBe (nc.bag.withAll [9,9,9,9,9])
+            assert (acesAndEights.addMultiple(10,2)) shouldBe  (nc.bag.withAll [1,1,8,8,8,10,10])
         }
 
         method testBagSizeAfterRemove {
@@ -184,6 +186,29 @@ def bagTest = object {
             assert (elAndCount) hasType (List<Binding<Number,Number>>)
             assert (elAndCount.size) shouldBe 5
             assert (elAndCount[1]) shouldBe (1::1) 
+        }
+
+        method testBagEqualityEmpty {
+            assert(empty == nc.bag.empty)
+            deny (empty != nc.bag.empty)
+        }
+
+        method testBagInequalityEmpty {
+            deny(empty == nc.bag.withAll [1])
+            assert(empty != nc.bag.withAll [1])
+            deny(empty == 3)
+            deny(empty == acesAndEights)
+        }
+
+        method testBagInequalityFive {
+            deny(oneToFive == nc.bag.withAll [1, 2, 3, 4, 6])
+            assert(oneToFive != nc.bag.withAll [1, 2, 3, 4, 6])
+        }
+
+        method testBagEqualityFive {
+            def isEqual = (oneToFive == nc.bag.withAll [1, 2, 3, 4, 5])
+            assert(isEqual)
+            deny(oneToFive != nc.bag.withAll [1, 2, 3, 4, 5])
         }
     
     }
