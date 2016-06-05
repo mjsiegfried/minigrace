@@ -493,9 +493,9 @@ def twoWayTest = object {
     }
 }
 
-
-def dictTests = gU.testSuite.fromTestMethodsIn(twoWayTest)
-dictTests.runAndPrintResults
+// this method didn't work due to bug with outer...
+//def dictTests = gU.testSuite.fromTestMethodsIn(twoWayTest)
+//dictTests.runAndPrintResults
 
 def bagTests = gU.testSuite.fromTestMethodsIn(bagTest)
 bagTests.runAndPrintResults

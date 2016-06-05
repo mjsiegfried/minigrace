@@ -1,6 +1,5 @@
 import "gUnit" as gU
 import "msiegfried-twoWayDictionary" as tw
-import "newCollections" as nc
 
 def twoWayTest = object {
     class forMethod(m) {
