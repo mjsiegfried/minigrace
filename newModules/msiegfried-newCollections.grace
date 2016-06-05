@@ -1,5 +1,4 @@
 import "collectionsPrelude" as cp
-import "newCollections" as nc
 
 method max(a,b)  {       // copied from standard prelude
     if (a > b) then { a } else { b }
@@ -237,19 +236,3 @@ class bag<T> {
     }
 }
 
-
-class twoWayDictionary {
-    use collectionFactory⟦T⟧
-
-    method at(k:K)put(v:T) {
-            self.empty.at(k)put(v)
-    }
-
-    method asString { "a two-way dictionary factory" }
-
-    class withAll(initialBindings: Iterable⟦Binding⟦K,T⟧⟧) → Dictionary⟦K,T⟧ {
-        inherits nc.dictionary.withAll
-    
-    }
-
-}
