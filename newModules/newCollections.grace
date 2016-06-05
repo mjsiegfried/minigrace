@@ -1413,7 +1413,7 @@ class dictionary⟦K,T⟧ {
     method at(k:K)put(v:T) {
             self.empty.at(k)put(v)
     }
-    class withAll(initialBindings: Iterable⟦Binding⟦K,T⟧⟧) → Dictionary⟦K,T⟧ {
+    class withAll(initialBindings) → Dictionary⟦K,T⟧ {
         use collection⟦T⟧
         var mods is readable := 0
         var numBindings := 0
