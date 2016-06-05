@@ -9,28 +9,28 @@ class twoWayDictionary⟦K,T⟧ {
 
     method asString { "a two-way dictionary factory" }
 
-    class withAll(initialBindings) → Dictionary⟦K,T⟧ {
+    class withAll(initialBindings: Iterable⟦Binding⟦K,T⟧⟧) → Dictionary⟦K,T⟧ {
         inherits nc.dictionary.withAll(initialBindings) 
         var valuesInner := _prelude.PrimitiveArray.new(8)
 
-        for (0..(valuesInner.size-1)) do {i→
-            valuesInner.at(i)put(unused)
+        for (0..(self.valuesInner.size-1)) do {i→
+            self.valuesInner.at(i)put(super.unused)
         }
 
         method at(key')put(value') {
             super.at(key')put(value')
-            var u := findPositionForAdd(value')
-            valuesInner.at(u)put(binding.key(value')value(key'))
+            var u := super.findPositionForAdd(value')
+            self.valuesInner.at(u)put(binding.key(value')value(key'))
             self    // for chaining
         }
 
         method at(k) {
-            var pos := findPosition(k)
-            var b := inner.at(pos)
+            var pos := super.findPosition(k)
+            var b := super.inner.at(pos)
             if (bVal.key == k) then {
                 return b.value
             }
-            var bVal := valuesInner.at(pos)
+            var bVal := self.valuesInner.at(pos)
             if (bVal.key == k) then {
                 return bVal.value
             }
@@ -38,12 +38,12 @@ class twoWayDictionary⟦K,T⟧ {
         }
 
         method at(k) ifAbsent(action) {
-            var pos := findPosition(k)
-            var b := inner.at(pos)
+            var pos := super.findPosition(k)
+            var b := super.inner.at(pos)
             if (b.key == k) then {
                 return b.value
             }
-            var bVal := valuesInner.at(pos)
+            var bVal := self.valuesInner.at(pos)
             if (bVal.key == k) then {
                 return bVal.value
             }
@@ -54,31 +54,31 @@ class twoWayDictionary⟦K,T⟧ {
             self.removeValue(v) ifAbsent { self.removeKey(v) }
         }
 
-        method contains(v) { containsValue(v) || containsKey(v) }
+        method contains(v) { super.containsValue(v) || super.containsKey(v) }
 
         method copy {
             def newCopy = twoWayDictionary.empty
-            self.keysAndValuesDo{ k, v →
+            self.super.keysAndValuesDo{ k, v →
                 newCopy.at(k)put(v)
             }
             newCopy
         }
 
         method expand is confidential {
-            def c = inner.size
+            def c = super.inner.size
             def n = c * 2
-            def oldInner = inner
-            def oldValuesInner = valuesInner
-            inner := _prelude.PrimitiveArray.new(n) 
-            valuesInner := _prelude.PrimitiveArray.new(n)
+            def oldInner = super.inner
+            def oldValuesInner = self.valuesInner
+            super.inner := _prelude.PrimitiveArray.new(n) 
+            self.valuesInner := _prelude.PrimitiveArray.new(n)
             for (0..(n - 1)) do {i→
-                inner.at(i)put(unused)
-                valuesInner.at(i)put(unused)
+                super.inner.at(i)put(super.unused)
+                self.valuesInner.at(i)put(super.unused)
             }
-            numBindings := 0
+            super.numBindings := 0
             for (0..(c - 1)) do {i→
                 def a = oldInner.at(i)
-                if ((a != unused) && {a != removed}) then {
+                if ((a != super.unused) && {a != super.removed}) then {
                     self.at(a.key)put(a.value)
                 }
             }
@@ -86,7 +86,7 @@ class twoWayDictionary⟦K,T⟧ {
 
         method --(other) {
             def newDict = twoWayDictionary.empty
-            keysAndValuesDo { k, v →
+            super.keysAndValuesDo { k, v →
                 if (! other.containsKey(k)) then {
                     newDict.at(k) put(v)
                 }
