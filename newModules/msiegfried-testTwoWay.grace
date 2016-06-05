@@ -284,51 +284,8 @@ def twoWayTest = object {
             assert(evens.bindings.sortedBy{b1, b2 -> b1.key.compare(b2.key)})
                 shouldBe (sequence ["eight"::8, "four"::4, "six"::6, "two"::2])
         }
-        method testDictionaryFailFastIteratorValues {
-            def input = dictionary ["one"::1, "five"::5, "three"::3, "two"::2, "four"::4]
-            def iter = input.iterator
-            input.at "three" put(100)
-            assert {iter.next} shouldRaise (ConcurrentModification)
-            def iter2 = input.iterator
-            input.at "three"
-            assert {iter2.next} shouldntRaise (ConcurrentModification)
-            def iter3 = input.iterator
-            input.removeValue(2)
-            assert {iter3.next} shouldRaise (ConcurrentModification)
-            def iter4 = input.iterator
-            input.removeKey("four")
-            assert {iter4.next} shouldRaise (ConcurrentModification)
-        }
-        method testDictionaryFailFastIteratorKeys {
-            def input = dictionary ["one"::1, "five"::5, "three"::3, "two"::2, "four"::4]
-            def iter = input.keys.iterator
-            input.at "three" put(100)
-            assert {iter.next} shouldRaise (ConcurrentModification)
-            def iter2 = input.keys.iterator
-            input.at "three"
-            assert {iter2.next} shouldntRaise (ConcurrentModification)
-            def iter3 = input.keys.iterator
-            input.removeValue(2)
-            assert {iter3.next} shouldRaise (ConcurrentModification)
-            def iter4 = input.keys.iterator
-            input.removeKey("four")
-            assert {iter4.next} shouldRaise (ConcurrentModification)
-        }
-        method testDictionaryFailFastIteratorBindings {
-            def input = dictionary ["one"::1, "five"::5, "three"::3, "two"::2, "four"::4]
-            def iter = input.bindings.iterator
-            input.at "three" put(100)
-            assert {iter.next} shouldRaise (ConcurrentModification)
-            def iter2 = input.bindings.iterator
-            input.at "three"
-            assert {iter2.next} shouldntRaise (ConcurrentModification)
-            def iter3 = input.bindings.iterator
-            input.removeValue(2)
-            assert {iter3.next} shouldRaise (ConcurrentModification)
-            def iter4 = input.bindings.iterator
-            input.removeKey("four")
-            assert {iter4.next} shouldRaise (ConcurrentModification)
-        }
+
+
     }
 }
 
