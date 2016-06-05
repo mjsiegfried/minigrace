@@ -1,5 +1,6 @@
 import "gUnit" as gU
 import "msiegfried-twoWayDictionary" as tw
+import "newCollections" as nc
 
 def twoWayTest = object {
     class forMethod(m) {
@@ -10,9 +11,13 @@ def twoWayTest = object {
         var empty
 
         method setup {
-            oneToFive := tw.newDictionary.withAll ["one"::1, "two"::2, "three"::3, "four"::4, "five"::5]
-            evens := tw.newDictionary.withAll ["two"::2, "four"::4, "six"::6, "eight"::8]
-            empty := tw.newDictionary.empty 
+            oneToFive := nc.dictionary.withAll ["one"::1, "two"::2, "three"::3, "four"::4, "five"::5]
+            evens := nc.dictionary.ithAll ["two"::2, "four"::4, "six"::6, "eight"::8]
+            empty := nc.dictionary.empty 
+
+            //oneToFive := tw.twoWayDictionary.withAll ["one"::1, "two"::2, "three"::3, "four"::4, "five"::5]
+            //evens := tw.twoWayDictionary.withAll ["two"::2, "four"::4, "six"::6, "eight"::8]
+            //empty := tw.twoWayDictionary.empty 
         }
         method testDictionaryTypeCollection {
             assert (oneToFive) hasType (Collection<Binding<String,Number>>)

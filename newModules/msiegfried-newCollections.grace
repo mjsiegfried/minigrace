@@ -236,3 +236,18 @@ class bag<T> {
     }
 }
 
+class twoWayDictionary<K,T> {
+
+    method asString { "a two-way dictionary factory" }
+
+    method withAll(initialBindings: Iterable<Binding<K,T>>) -> Dictionary<K,T> {
+        def result = empty
+        for (initialBindings) do { b -> result.add(b) }
+        result
+    }
+
+    class empty -> Dictionary<K,T> {
+        inherits cp.dictionary.empty
+    }
+}
+

@@ -11,6 +11,33 @@ class twoWayDictionary⟦K,T⟧ {
 
     class withAll(initialBindings) → Dictionary⟦K,T⟧ {
         inherits nc.dictionary.withAll 
+        method at(k) {
+            var b := inner.at(findPosition(k))
+            if (b.key == k ) then {
+                return b.value
+            }
+            if(b.value == k) then {
+                return b.key
+            }
+            NoSuchObject.raise "dictionary does not contain entry with key {k}"
+        }
+        method at(k) ifAbsent(action) {
+            var b := inner.at(findPosition(k))
+            if (b.key == k) then {
+                return b.value
+            }
+            if(b.value == k) then {
+                return b.key
+            }
+            action.apply
+        }
+        method containsKey(k) {
+            var t := findPosition(k)
+            if (inner.at(t).key == k) then {
+                return true
+            }
+            false
+        }
     }
 
 }
