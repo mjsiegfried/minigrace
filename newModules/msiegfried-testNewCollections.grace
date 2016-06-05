@@ -170,7 +170,7 @@ def bagTest = object {
             var elAndCount := oneToFive.elementsAndCounts.asList
             assert (elAndCount) hasType (List<Binding<Number,Number>>)
             assert (elAndCount.size) shouldBe 5
-            assert (elAndCount[1]) shouldBe (1::1) 
+            assert (elAndCount [1]) shouldBe (1::1) 
         }
 
         method testBagEqualityEmpty {
