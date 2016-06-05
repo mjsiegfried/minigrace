@@ -84,7 +84,15 @@ class twoWayDictionary⟦K,T⟧ {
             }
         }
 
-
+        method --(other) {
+            def newDict = twoWayDictionary.empty
+            keysAndValuesDo { k, v →
+                if (! other.containsKey(k)) then {
+                    newDict.at(k) put(v)
+                }
+            }
+            return newDict
+        }
 
 
     }
