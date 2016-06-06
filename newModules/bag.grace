@@ -1,5 +1,3 @@
-// write type spec for this and two-way dict
-
 import "collectionsPrelude" as cp
 class bag<T> {
 
