@@ -4,17 +4,21 @@ class twoWayDictionary⟦K,T⟧ {
     use nc.collectionFactory⟦T⟧
 
     method at(k:K)put(v:T) {
-            self.empty.at(k)put(v)
+        self.empty.at(k)put(v)
     }
 
     method asString { "a two-way dictionary factory" }
 
     class withAll(initialBindings: Iterable⟦Binding⟦K,T⟧⟧) → Dictionary⟦K,T⟧ {
         inherits nc.dictionary.withAll(initialBindings) 
+
         var valuesInner := _prelude.PrimitiveArray.new(8)
 
-        for (0..(self.valuesInner.size-1)) do {i→
-            self.valuesInner.at(i)put(super.unused)
+        method initialize {
+            super.initialize
+            for (0..(self.valuesInner.size-1)) do {i→
+                self.valuesInner.at(i)put(super.unused)
+            }
         }
 
         method at(key')put(value') {

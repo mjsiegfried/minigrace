@@ -1436,10 +1436,16 @@ class dictionary⟦K,T⟧ {
                 isMe(other)
             }
         }
-        for (0..(inner.size-1)) do {i→
-            inner.at(i)put(unused)
+
+        self.initialize
+
+        method initialize {
+            for (0..(inner.size-1)) do {i→
+                inner.at(i)put(unused)
+            }
+            for (initialBindings) do { b → at(b.key)put(b.value) }
         }
-        for (initialBindings) do { b → at(b.key)put(b.value) }
+
         method size { numBindings }
         method at(key')put(value') {
             mods := mods + 1

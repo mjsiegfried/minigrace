@@ -285,7 +285,25 @@ def twoWayTest = object {
                 shouldBe (sequence ["eight"::8, "four"::4, "six"::6, "two"::2])
         }
 
+        method testTwoWayGet {
+            empty.at "nine" put (9)
+            assert (empty.at(9)) shouldBe "Nine"
+            assert (evens.at(4)) shouldBe "Four"
+        }
+        method testTwoWayGetNormal {
+            empty.at "nine" put (9)
+            assert (empty.at("Nine")) shouldBe 9
+        }
 
+        method testTwoWayRemove {
+            oneToFive.remove "one".remove 2 .remove "three"
+            assert(oneToFive.size) shouldBe 2
+            deny(oneToFive.contains 1) description "\"one\" still present"
+            deny(oneToFive.contains "two") description "\"two\" still present"
+            deny(oneToFive.contains "three") description "\"three\" still present"
+            assert(oneToFive.contains "four")
+            assert(oneToFive.contains 5)
+        }
     }
 }
 
