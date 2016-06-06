@@ -14,7 +14,7 @@ class twoWayDictionary⟦K,T⟧ {
 
         var valuesInner := _prelude.PrimitiveArray.new(8)
 
-        method initialize {
+        method initialize is confidential {
             super.initialize
             for (0..(self.valuesInner.size-1)) do {i→
                 self.valuesInner.at(i)put(super.unused)

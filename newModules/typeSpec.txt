@@ -1,0 +1,145 @@
+Bags
+
+Bags are unordered collections of elements with duplicates.
+
+type Bag⟦T⟧ = Collection⟦T⟧ & type {
+    size -> Number
+    // the number of elements in self.
+    
+    add(element:T) -> Bag⟦T⟧
+    // increases self count of element by one.  Returns self.    
+    
+    addAll(elements:Iterable⟦T⟧) -> Bag⟦T⟧
+    // increases self count of each element by one. Returns self 
+
+    addMultiple(element:T, num:Number) -> Bag⟦T⟧
+    // increases self count of element by num. Returns self 
+     
+    remove(element: T) -> Bag⟦T⟧
+    // decreases self count of each element by one. It is an error if element is not present.   Returns self.
+    
+    remove(elements: T) ifAbsent(block: Block0⟦Done⟧) -> Bag⟦T⟧
+    //  decreases self count of each element by one. Executes action if element is not present.   Returns self.
+    
+    removeAll(element: T)
+    // removes all occurrences of elem from self.  Raises NoSuchObject if any of the elems is
+    // not present.   Returns self.
+
+    removeAll(element: T) ifAbsent(action:Block1⟦T, Done⟧) -> Bag⟦T⟧
+    // removes all occurrences of elem from self. Executes action.apply(e) if element is not present.   Returns self.
+   
+    countOf(element:T) -> Number 
+    // returns number of occurrences of an element 
+ 
+    contains(element:T) -> Boolean
+    // true if self contains elem
+
+    includes(predicate: Block1⟦T,Boolean⟧) -> Boolean
+    // true if predicate holds for any of the elements of self
+    
+    find(predicate: Block1⟦T,Boolean⟧) ifNone(notFoundBlock: Block0⟦T⟧) -> T
+    // returns an element of self for which predicate holds, or the result of applying notFoundBlock is there is none.
+    
+    copy -> Bag⟦T⟧
+    // returns a copy of self
+    
+    ** (other:Bag⟦T⟧) -> Bag⟦T⟧
+    // bag intersection; returns a new bag that is the intersection of self and other. Takes minimum multiplicity between each bag. 
+    
+    -- (other:Bag⟦T⟧) -> Bag⟦T⟧
+    // bag difference (relative complement); the result contains all total counts of all my elements subtracted by number of occurrences of those elements in the other.   
+
+    ++ (other:Bag⟦T⟧) -> Bag⟦T⟧
+    // bag union; the result contains elements that were in self or in other (or in both). Takes maximum multiplicity between each bag.
+
+    isSubset(s2: Bag⟦T⟧) -> Boolean
+    // true if s2 has an equal or higher multiplicity of all of my elements
+
+    isSuperset(s2: Iterable⟦T⟧) -> Boolean
+    // true if I have an equal or higher multiplicity of all of s2's elements
+    
+    into(existing:Collection⟦T⟧) -> Collection⟦T⟧
+    // adds my elements to existing, and returns existing.
+
+    elementsAndCounts -> Enumerable⟦T⟧
+    // returns a lazy list of the internal bindings of elements and counts
+}
+
+
+
+4.7 TwoWayDictionary
+
+The type TwoWayDictionary⟦K, T⟧ describes objects that are mappings from keys of type K to values of type T. Unlike the normal dictionary, the at()put() method will store the key-value pairing in a hash based on value in addition to key and allows for reverse lookup using the at() method with good performance.
+
+type TwoWayDictionary⟦K, T⟧ = Collection⟦T⟧ & type {
+    size -> Number
+    // the number of key::value bindings in self
+
+    at(key:K) put(value:T) -> TwoWayDictionary⟦K, T⟧
+    // puts value at key, puts key at value; returns self
+    
+    at(k:K) -> T
+    // returns my value at key k or key at value k; raises NoSuchObject if there is none.
+    
+    at(k:K) ifAbsent(action:Block0⟦T⟧) -> T
+    // returns my value at key k or key at value k; returns the result of applying action if there is none.
+
+    containsKey(k:K) -> Boolean 
+    // returns true if one of my keys == k
+    
+    contains(v:T) -> Boolean
+    // returns true if one of my keys or values == k
+
+    containsValue(v:T) -> Boolean
+    // returns true if one of my values == v
+
+    remove(key: K) -> Self
+    // removes key-value pair where either key or value == k
+
+    removeAllKeys(keys: Iterable⟦K⟧) -> Self
+    // removes all of the keys from self, along with the corresponding values.  Returns self.
+
+    removeKey(key: K) -> Self
+    // removes key from self, along with the corresponding value.  Returns self.
+
+    removeAllValues(removals: Iterable⟦T⟧) -> Self
+    // removes from self all of the values in removals, along with the corresponding keys.  
+    // Returns self.
+
+    removeValue(removal:T) -> Self
+    // removes from self the value removal, along with the corresponding key.
+    // Returns self.
+
+    keys -> Iterable⟦K⟧
+    // returns my keys as a lazy sequence in arbitrary order
+
+    values -> Iterable⟦T⟧
+    // returns my values as a lazy sequence in arbitrary order
+    
+    bindings -> Iterable⟦ Binding⟦K, T⟧ ⟧
+    // returns my bindings as a lazy sequence
+
+    keysAndValuesDo(action:Block2⟦K, T, Object⟧ ) -> Done
+    // applies action, in arbitrary order, to each of my keys and the corresponding value. 
+
+    keysDo(action:Block2⟦K, Object⟧) -> Done
+    // applies action, in arbitrary order, to each of my keys.
+
+    valuesDo(action:Block2⟦T, Object⟧) -> Done
+    do(action:Block2⟦T, Object⟧) -> Done
+    // applies action, in arbitrary order, to each of my values.
+
+    copy -> Self
+    // returns a new two way dictionary that is a (shallow) copy of self
+
+    asDictionary -> Dictionary⟦K, T⟧
+    // returns self
+
+    ++ (other:TwoWayDictionary⟦K, T⟧) -> TwoWayDictionary⟦K, T⟧
+    // returns a new two way dictionary that merges the entries from self and other.
+    // A value in other at key k overrides the value in self at key k.
+    
+    -- (other:TwoWayDictionary⟦K, T⟧) -> TwoWayDictionary⟦K, T⟧
+    // returns a new two way dictionary that contains all of my entries except 
+    // for those whose keys are in other
+}
