@@ -9,7 +9,7 @@ class twoWayDictionary⟦K,T⟧ {
 
     method asString { "a two-way dictionary factory" }
 
-    class withAll(initialBindings)  {
+    class withAll(initialBinds)  {
         inherits nc.dictionary.withAll [] 
 
         var valuesInner := _prelude.PrimitiveArray.new(8)
@@ -21,7 +21,7 @@ class twoWayDictionary⟦K,T⟧ {
             for (0..(self.valuesInner.size-1)) do {i→
                 self.valuesInner.at(i)put(super.unused)
             } 
-            for (initialBindings) do { b → at(b.key)put(b.value) }
+            for (initialBinds) do { b → at(b.key)put(b.value) }
         }
 
         method at(key')put(value') {

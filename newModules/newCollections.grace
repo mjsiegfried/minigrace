@@ -1434,7 +1434,9 @@ class dictionary⟦K,T⟧ {
             }
         }
 
-//        self.initialize
+        // self.initialize
+        // this is still commented out. Even when inheriting from an empty dictionary
+        // the compiler complained about a missing valuesInner variable 
 
         method initialize {
             for (0..(inner.size-1)) do {i→
