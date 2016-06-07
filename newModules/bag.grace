@@ -181,17 +181,18 @@ class bag<T> {
             result
         }
 
-        method isSubset(s2: Iterable<T>) {                          // test multiplicity
-            self.do{ each ->
-                if (s2.contains(each).not) then { return false }
+        method isSubset(s2: Iterable<T>) {         
+            self.elementsAndCounts.do { each ->
+                if(!(each.value <= s2.countOf(each.key))) then { return false }
             }
             return true
         }
 
-        method isSuperset(s2: Iterable<T>) {
-            s2.do{ each ->
-                if (self.contains(each).not) then { return false }
+        method isSuperset(s2: Iterable<T>) {                                // s2 should be bag, but the type interface seems to be broken
+            s2.elementsAndCounts.do { each ->
+                if(!(each.value <= self.countOf(each.key))) then { return false }
             }
+
             return true
         }
         method into(existing: Expandable<T>) -> Collection<T> {
