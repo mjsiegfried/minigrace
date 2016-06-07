@@ -1212,14 +1212,14 @@ class set⟦T⟧ {
                 }
                 return notFoundBlock.apply
             }
-            method findPosition(x, array) is confidential {
+            method findPosition(x) is confidential {
                 def h = x.hash
-                def s = array.size
+                def s = inner.size
                 var t := h % s
                 var jump := 5
                 var candidate
                 while {
-                    candidate := array.at(t)
+                    candidate := inner.at(t)
                     unused ≠ candidate
                 } do {
                     if (candidate == x) then {
@@ -1234,14 +1234,14 @@ class set⟦T⟧ {
                 }
                 return t
             }
-            method findPositionForAdd(x, array) is confidential {
+            method findPositionForAdd(x) is confidential {
                 def h = x.hash
-                def s = array.size
+                def s = inner.size
                 var t := h % s
                 var jump := 5
                 var candidate
                 while {
-                    candidate := array.at(t)
+                    candidate := inner.at(t)
                     (unused ≠ candidate) && {removed ≠ candidate}
                 } do {
                     if (candidate == x) then {
@@ -1552,7 +1552,7 @@ class dictionary⟦K,T⟧ {
 
         method findPosition(x, array) is confidential {
             def h = x.hash
-            def s = inner.size
+            def s = array.size
             var t := h % s
             var jump := 5
             while {unused ≠ inner.at(t)} do {
@@ -1570,7 +1570,7 @@ class dictionary⟦K,T⟧ {
         }
         method findPositionForAdd(x, array) is confidential {
             def h = x.hash
-            def s = inner.size
+            def s = array.size
             var t := h % s
             var jump := 5
             while {(unused ≠ inner.at(t)) && {removed ≠ inner.at(t)}} do {

@@ -18,21 +18,17 @@ class bag<T> {
             return inner.containsKey(elt) 
         }
 
-        method add(elt:T) {    // use if absent 
-            var numElts := 0
-            if(inner.containsKey(elt)) then {
-                numElts := inner.at(elt)
-            }
+        method add(elt:T) {   
+            var numElts
+            numElts := inner.at(elt) ifAbsent {0}
             inner.at(elt) put (numElts + 1)
             size := size + 1 
             self    // for chaining
         }
 
         method addMultiple(elt:T, num:Number) {
-            var numElts := 0
-            if(inner.containsKey(elt)) then {
-                numElts := inner.at(elt)
-            }
+            var numElts
+            numElts := inner.at(elt) ifAbsent {0}
             inner.at(elt) put (numElts + num)
             size := size + num 
             self    // for chaining
@@ -45,7 +41,7 @@ class bag<T> {
             self    // for chaining
         }
 
-        method remove (elt:T) ifAbsent (block) {
+        method remove (elt:T) ifAbsent (block) {  
             if (inner.containsKey(elt)) then {
                 var newNumElts := (inner.at(elt) - 1)
                 if ((newNumElts) < 1) then {
@@ -68,7 +64,7 @@ class bag<T> {
             self    // for chaining
         }
 
-        method removeAll (elt:T) ifAbsent (block) {
+        method removeAll (elt:T) ifAbsent (block) {    
             if (inner.containsKey(elt)) then {
                 var numElts := (inner.at(elt))
                 inner.removeKey(elt)
@@ -114,13 +110,8 @@ class bag<T> {
             return notFoundBlock.apply
         }
 
-        method countOf(elt:T) {                             //ifAbsent 
-            if (inner.containsKey(elt)) then {
-                return inner.at(elt)        
-            }
-            else {
-                return 0
-            }
+        method countOf(elt:T) {             
+            return inner.at(elt) ifAbsent {0}       
         }
 
         class iterator {
