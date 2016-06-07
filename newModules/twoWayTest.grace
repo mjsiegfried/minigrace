@@ -287,12 +287,12 @@ def twoWayTest = object {
 
         method testTwoWayGet {
             empty.at "nine" put (9)
-            assert (empty.at(9)) shouldBe "Nine"
-            assert (evens.at(4)) shouldBe "Four"
+            assert (empty.at(9)) shouldBe "nine"
+            assert (evens.at(4)) shouldBe "four"
         }
         method testTwoWayGetNormal {
             empty.at "nine" put (9)
-            assert (empty.at("Nine")) shouldBe 9
+            assert (empty.at("nine")) shouldBe 9
         }
 
         method testTwoWayRemove {
