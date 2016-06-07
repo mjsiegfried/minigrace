@@ -161,7 +161,6 @@ trait collectionFactory⟦T⟧ {
 
 class lazySequenceOver⟦T,R⟧(source: Iterable⟦T⟧)
         mappedBy(function:Block1⟦T,R⟧) → Enumerable⟦R⟧ is confidential {
-    inherits graceObject 
     use enumerable⟦T⟧
     class iterator {
         def sourceIterator = source.iterator
@@ -176,7 +175,6 @@ class lazySequenceOver⟦T,R⟧(source: Iterable⟦T⟧)
 
 class lazySequenceOver⟦T⟧(source: Iterable⟦T⟧)
         filteredBy(predicate:Block1⟦T,Boolean⟧) → Enumerable⟦T⟧ is confidential {
-    inherits graceObject 
     use enumerable⟦T⟧
     class iterator {
         var cache
@@ -227,7 +225,6 @@ class iteratorConcat⟦T⟧(left:Iterator⟦T⟧, right:Iterator⟦T⟧) {
     method asString { "an iterator over a concatenation" }
 }
 class lazyConcatenation⟦T⟧(left, right) → Enumerable⟦T⟧{
-    inherit graceObject 
     use enumerable⟦T⟧
     method iterator {
         iteratorConcat(left.iterator, right.iterator)
@@ -1215,14 +1212,14 @@ class set⟦T⟧ {
                 }
                 return notFoundBlock.apply
             }
-            method findPosition(x) is confidential {
+            method findPosition(x, array) is confidential {
                 def h = x.hash
-                def s = inner.size
+                def s = array.size
                 var t := h % s
                 var jump := 5
                 var candidate
                 while {
-                    candidate := inner.at(t)
+                    candidate := array.at(t)
                     unused ≠ candidate
                 } do {
                     if (candidate == x) then {
@@ -1237,14 +1234,14 @@ class set⟦T⟧ {
                 }
                 return t
             }
-            method findPositionForAdd(x) is confidential {
+            method findPositionForAdd(x, array) is confidential {
                 def h = x.hash
-                def s = inner.size
+                def s = array.size
                 var t := h % s
                 var jump := 5
                 var candidate
                 while {
-                    candidate := inner.at(t)
+                    candidate := array.at(t)
                     (unused ≠ candidate) && {removed ≠ candidate}
                 } do {
                     if (candidate == x) then {
@@ -1437,7 +1434,7 @@ class dictionary⟦K,T⟧ {
             }
         }
 
-        self.initialize
+//        self.initialize
 
         method initialize {
             for (0..(inner.size-1)) do {i→
@@ -1449,7 +1446,7 @@ class dictionary⟦K,T⟧ {
         method size { numBindings }
         method at(key')put(value') {
             mods := mods + 1
-            var t := findPositionForAdd(key')
+            var t := findPositionForAdd(key',inner)
             if ((unused == inner.at(t)) || {removed == inner.at(t)}) then {
                 numBindings := numBindings + 1
             }
@@ -1458,21 +1455,21 @@ class dictionary⟦K,T⟧ {
             self    // for chaining
         }
         method at(k) {
-            var b := inner.at(findPosition(k))
+            var b := inner.at(findPosition(k,inner))
             if (b.key == k) then {
                 return b.value
             }
             NoSuchObject.raise "dictionary does not contain entry with key {k}"
         }
         method at(k) ifAbsent(action) {
-            var b := inner.at(findPosition(k))
+            var b := inner.at(findPosition(k,inner))
             if (b.key == k) then {
                 return b.value
             }
             action.apply
         }
         method containsKey(k) {
-            var t := findPosition(k)
+            var t := findPosition(k,inner)
             if (inner.at(t).key == k) then {
                 return true
             }
@@ -1481,7 +1478,7 @@ class dictionary⟦K,T⟧ {
         method removeAllKeys(keys) {
             mods := mods + 1
             for (keys) do { k →
-                var t := findPosition(k)
+                var t := findPosition(k,inner)
                 if (inner.at(t).key == k) then {
                     inner.at(t)put(removed)
                     numBindings := numBindings - 1
@@ -1493,7 +1490,7 @@ class dictionary⟦K,T⟧ {
         }
         method removeKey(k:K) {
             mods := mods + 1
-            var t := findPosition(k)
+            var t := findPosition(k,inner)
             if (inner.at(t).key == k) then {
                 inner.at(t)put(removed)
                 numBindings := numBindings - 1
@@ -1553,7 +1550,7 @@ class dictionary⟦K,T⟧ {
         }
         method contains(v) { containsValue(v) }
 
-        method findPosition(x) is confidential {
+        method findPosition(x, array) is confidential {
             def h = x.hash
             def s = inner.size
             var t := h % s
@@ -1571,7 +1568,7 @@ class dictionary⟦K,T⟧ {
             }
             return t
         }
-        method findPositionForAdd(x) is confidential {
+        method findPositionForAdd(x, array) is confidential {
             def h = x.hash
             def s = inner.size
             var t := h % s
@@ -1623,7 +1620,6 @@ class dictionary⟦K,T⟧ {
         method keys → Enumerable⟦K⟧ {
             def sourceDictionary = self
             object {
-                inherit graceObject 
                 use enumerable⟦K⟧
                 class iterator {
                     def sourceIterator = sourceDictionary.bindingsIterator
@@ -1642,7 +1638,6 @@ class dictionary⟦K,T⟧ {
         method values → Enumerable⟦T⟧ {
             def sourceDictionary = self
             object {
-                inherit graceObject 
                 use enumerable⟦T⟧
                 class iterator {
                     def sourceIterator = sourceDictionary.bindingsIterator
@@ -1662,7 +1657,6 @@ class dictionary⟦K,T⟧ {
         method bindings → Enumerable⟦T⟧ {
             def sourceDictionary = self
             object {
-                inherit graceObject 
                 use enumerable⟦T⟧
                 method iterator { sourceDictionary.bindingsIterator }
                 // should be request on outer

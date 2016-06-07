@@ -114,7 +114,7 @@ class bag<T> {
             return notFoundBlock.apply
         }
 
-        method countOf(elt:T) {         //ifAbsent 
+        method countOf(elt:T) {                             //ifAbsent 
             if (inner.containsKey(elt)) then {
                 return inner.at(elt)        
             }
@@ -133,7 +133,7 @@ class bag<T> {
             method next { sourceIterator.next }
         }
 
-        method ==(other) {     // this is wrong, type match and compare el and count
+        method ==(other) {                                  // this is wrong, type match and compare el and count
             if (Iterable.match(other)) then {
                 var otherSize := 0
                 other.do { each ->
@@ -190,7 +190,7 @@ class bag<T> {
             result
         }
 
-        method isSubset(s2: Iterable<T>) {  // test multiplicity
+        method isSubset(s2: Iterable<T>) {                          // test multiplicity
             self.do{ each ->
                 if (s2.contains(each).not) then { return false }
             }

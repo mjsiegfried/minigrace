@@ -18,24 +18,25 @@ class twoWayDictionary⟦K,T⟧ {
             super.initialize
             for (0..(self.valuesInner.size-1)) do {i→
                 self.valuesInner.at(i)put(super.unused)
-            }
+            } 
             for (initialBindings) do { b → at(b.key)put(b.value) }
         }
 
         method at(key')put(value') {
             super.at(key')put(value')
-            var u := super.findPositionForAdd(value')                            /// refactor findPosition for add
+            var u := super.findPositionForAdd(value', valuesInner)                            /// refactor findPosition for add
             self.valuesInner.at(u)put(binding.key(value')value(key'))
             self    // for chaining
         }
 
         method at(k) {
-            var pos := super.findPosition(k)
+            var pos := super.findPosition(k,inner)
             var b := super.inner.at(pos)
             if (bVal.key == k) then {
                 return b.value
             }
-            var bVal := self.valuesInner.at(pos)
+            var valPos := super.findPosition(k,valuesInner)
+            var bVal := self.valuesInner.at(valPos)
             if (bVal.key == k) then {
                 return bVal.value
             }
@@ -43,12 +44,13 @@ class twoWayDictionary⟦K,T⟧ {
         }
 
         method at(k) ifAbsent(action) {
-            var pos := super.findPosition(k)
+            var pos := super.findPosition(k,inner)
             var b := super.inner.at(pos)
             if (b.key == k) then {
                 return b.value
             }
-            var bVal := self.valuesInner.at(pos)
+            var valPos := super.findPosition(k,valuesInner)
+            var bVal := self.valuesInner.at(valPos)
             if (bVal.key == k) then {
                 return bVal.value
             }
