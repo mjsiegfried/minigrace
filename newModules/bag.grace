@@ -125,8 +125,8 @@ class bag<T> {
         }
 
         method ==(other) {                                  // this is wrong, type match and compare el and count
-            if (Iterable.match(other)) then {
-                var otherSize := 0
+            if (Iterable.match(other)) then {               // I can't seem to make any changes to this method without
+                var otherSize := 0                          // getting 'error 11' at the moment... 
                 other.do { each ->
                     otherSize := otherSize + 1
                     if (! self.contains(each)) then {

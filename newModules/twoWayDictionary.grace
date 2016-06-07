@@ -13,6 +13,8 @@ class twoWayDictionary⟦K,T⟧ {
         inherits nc.dictionary.withAll [] 
 
         var valuesInner := _prelude.PrimitiveArray.new(8)
+        
+        self.initialize
 
         method initialize is confidential {
             super.initialize
@@ -24,13 +26,13 @@ class twoWayDictionary⟦K,T⟧ {
 
         method at(key')put(value') {
             super.at(key')put(value')
-            var u := super.findPositionForAdd(value', valuesInner)                            /// refactor findPosition for add
+            var u := super.findPositionForAdd(value', valuesInner) 
             self.valuesInner.at(u)put(binding.key(value')value(key'))
             self    // for chaining
         }
 
         method at(k) {
-            var pos := super.findPosition(k,inner)
+            var pos := super.findPosition(k,super.inner)
             var b := super.inner.at(pos)
             if (bVal.key == k) then {
                 return b.value
@@ -44,12 +46,12 @@ class twoWayDictionary⟦K,T⟧ {
         }
 
         method at(k) ifAbsent(action) {
-            var pos := super.findPosition(k,inner)
+            var pos := super.findPosition(k, super.inner)
             var b := super.inner.at(pos)
             if (b.key == k) then {
                 return b.value
             }
-            var valPos := super.findPosition(k,valuesInner)
+            var valPos := super.findPosition(k, valuesInner)
             var bVal := self.valuesInner.at(valPos)
             if (bVal.key == k) then {
                 return bVal.value
