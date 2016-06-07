@@ -1555,8 +1555,8 @@ class dictionary⟦K,T⟧ {
             def s = array.size
             var t := h % s
             var jump := 5
-            while {unused ≠ inner.at(t)} do {
-                if (inner.at(t).key == x) then {
+            while {unused ≠ array.at(t)} do {
+                if (array.at(t).key == x) then {
                     return t
                 }
                 if (jump != 0) then {
@@ -1573,8 +1573,8 @@ class dictionary⟦K,T⟧ {
             def s = array.size
             var t := h % s
             var jump := 5
-            while {(unused ≠ inner.at(t)) && {removed ≠ inner.at(t)}} do {
-                if (inner.at(t).key == x) then {
+            while {(unused ≠ array.at(t)) && {removed ≠ array.at(t)}} do {
+                if (array.at(t).key == x) then {
                     return t
                 }
                 if (jump != 0) then {

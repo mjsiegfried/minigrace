@@ -34,7 +34,7 @@ class twoWayDictionary⟦K,T⟧ {
         method at(k) {
             var pos := super.findPosition(k,super.inner)
             var b := super.inner.at(pos)
-            if (bVal.key == k) then {
+            if (b.key == k) then {
                 return b.value
             }
             var valPos := super.findPosition(k,valuesInner)
