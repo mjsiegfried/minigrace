@@ -1434,9 +1434,14 @@ class dictionary⟦K,T⟧ {
             }
         }
 
-        // self.initialize
+        //self.initialize
+
         // this is still commented out. Even when inheriting from an empty dictionary
         // the compiler complained about a missing valuesInner variable 
+        // Even commenting out the line:
+        //    for (initialBindings) do { b → at(b.key)put(b.value) }
+        // does not solve the error. There is something wrong with nested classes and initialization code
+        // but I can't figure it out. It says 'no method valuesInner in twoWayDictionary.twoWayDictionary.withAll,
 
         method initialize {
             for (0..(inner.size-1)) do {i→
