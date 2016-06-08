@@ -284,17 +284,28 @@ def twoWayTest = object {
             assert(evens.bindings.sortedBy{b1, b2 -> b1.key.compare(b2.key)})
                 shouldBe (sequence ["eight"::8, "four"::4, "six"::6, "two"::2])
         }
-
+        method testTwoWayAdd {
+            assert (evens.at(8)) shouldBe "eight"
+            assert (evens.at("eight")) shouldBe 8
+        }
         method testTwoWayGet {
-            empty.at "nine" put (9)
+            empty.at "nine" put (9) 
             assert (empty.at(9)) shouldBe "nine"
             assert (evens.at(4)) shouldBe "four"
         }
         method testTwoWayGetNormal {
-            empty.at "nine" put (9)
+            empty.at "nine" put (9) 
             assert (empty.at("nine")) shouldBe 9
         }
-
+        method testTwoWayContains {
+            empty.at "nine" put (9) 
+            assert (empty.contains(9)) shouldBe true
+            assert (evens.contains(4)) shouldBe true
+        }
+        method testTwoWayContainsNormal {
+            empty.at "nine" put (9)
+            assert (empty.contains("nine")) shouldBe true
+        }
         method testTwoWayRemove {
             oneToFive.remove "one".remove 2 .remove "three"
             assert(oneToFive.size) shouldBe 2
